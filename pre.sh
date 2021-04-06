@@ -1,7 +1,10 @@
 #!/bin/sh
 
-xcode-select --install
-python3 -m pip install ansible-core==2.11 --user
+python3 -mvenv env
+PREFIX=env/bin
 
-ansible-galaxy collection install -r requirements.yml
-ansible-galaxy role install -r requirements.yml
+xcode-select --install
+$PREFIX/python3 -m pip install ansible-core
+
+$PREFIX/ansible-galaxy collection install -r requirements.yml
+$PREFIX/ansible-galaxy role install -r requirements.yml
