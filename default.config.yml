@@ -2,6 +2,10 @@
 configure_dotfiles: true
 configure_terminal: true
 configure_osx: true
+configure_spectacle: true
+configure_tmux: true
+configure_gnu_bash: true
+configure_iterm: true
 
 # Set to 'true' to configure the Dock via dockutil.
 configure_dock: false
@@ -22,9 +26,12 @@ sudoers_custom_config: ''
 #   # Allow users in admin group to use sudo with no password.
 #   %admin ALL=(ALL) NOPASSWD: ALL
 
+git_clone_location: ~/Development/GitHub/
+
 dotfiles_repo: https://github.com/geerlingguy/dotfiles.git
+dotfiles_repo_version:
 dotfiles_repo_accept_hostkey: true
-dotfiles_repo_local_destination: ~/Development/GitHub/dotfiles
+dotfiles_repo_local_destination: "{{ git_clone_location }}/dotfiles"
 dotfiles_files:
   - .zshrc
   - .gitignore
@@ -56,6 +63,7 @@ homebrew_installed_packages:
   - readline
   - openssl
   - pv
+  - tmux
   - wget
   - wrk
   - zsh-history-substring-search
@@ -70,6 +78,7 @@ homebrew_cask_apps:
   - firefox
   - google-chrome
   - handbrake
+  - iterm2
   - licecap
   - sequel-ace
   - slack

@@ -1,0 +1,46 @@
+---
+- name: spectacle - Install Spectacle shortcuts
+  copy:
+    src: spectacle/
+    dest: "{{ lookup('env', 'HOME') }}/"
+  when: configure_spectacle
+  tags: ["spectacle"]
+
+- name: tmux - Ensure tmux plugin manager is cloned locally.
+  git:
+    repo: "https://github.com/tmux-plugins/tpm.git"
+    dest: "{{ lookup('env', 'HOME') }}/.tmux/plugins/tpm"
+    version: "master"
+    accept_hostkey: "true"
+  become: false
+  when: configure_tmux
+  tags: ["tmux"]
+
+- name: bash - Configure system for newer bash version.
+  ansible.builtin.lineinfile:
+    path: /etc/shells
+    line: /usr/local/bin/bash
+  become: true
+  when: configure_gnu_bash
+
+- name: bash - Set default shell to new bash.
+  command: chsh -s /usr/local/bin/bash
+  changed_when: false
+  become: true
+  when: configure_gnu_bash
+
+- name: fzf - Install fuzzy search for shells
+  shell: $(brew --prefix)/opt/fzf/install --all --no-bash --no-zsh --no-fish
+  changed_when: false
+
+- name: jenv - add versions
+  shell: $(brew --prefix)/bin/jenv add $(/usr/libexec/java_home)
+  changed_when: '"added" in output.stdout'
+  register: output
+
+- name: iTerm2 - create profiles
+  copy:
+    src: iterm/
+    dest: "{{ lookup('env', 'HOME') }}/Library/Application Support/iTerm2/DynamicProfiles"
+  when: configure_iterm
+  tags: ["iterm"]
